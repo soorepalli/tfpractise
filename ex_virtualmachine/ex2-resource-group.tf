@@ -1,4 +1,4 @@
-resource "azurerm_resouce_group" "rgdemo" {
+resource "azurerm_resource_group" "DemoforVM" {
     name = "DemoforVM"
     location = "East US"
 }
