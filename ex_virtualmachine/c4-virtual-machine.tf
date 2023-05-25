@@ -7,15 +7,16 @@ resource "azurerm_virtual_machine" "webserver1" {
     #admin_username = "admin123"
     network_interface_ids = [ azurerm_network_interface.myconn.id ]
 
-  /*  admin_ssh_key {
+    /*admin_ssh_key {
       username = "azureuser"
       public_key = file("${path.module}/sshkeys/tfpractise.pem.pub")
     }
-  */
+    */
+  
     storage_image_reference {
-      publisher = "Canonical"
-      offer = "UbuntuServer"
-      sku = "18.04-LTS"
+      publisher = "RedHat"
+      offer = "RHEL"
+      sku = "83-gen2"
       version = "latest"
 
     }
@@ -34,11 +35,14 @@ resource "azurerm_virtual_machine" "webserver1" {
       computer_name = "NewMachine"
       admin_username = "admin123"
       admin_password = "admin123!"
+      custom_data = filebase64("${path.module}/app-scripts/app1-cloud-init.txt")
     }
 
     os_profile_linux_config {
       disable_password_authentication = false
     }
+
+    
 
     tags = {
       environment = "DemoVM"
