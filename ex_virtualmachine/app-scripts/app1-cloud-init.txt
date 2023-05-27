@@ -15,4 +15,5 @@ runcmd:
   - sudo systemctl start httpd  
   - sudo systemctl enable httpd
   - sudo systemctl stop firewalld
+  - sudo systemctl start firewalld
   - sudo mkdir /var/www/html/app1

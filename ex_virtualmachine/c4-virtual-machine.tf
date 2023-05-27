@@ -1,17 +1,39 @@
-resource "azurerm_virtual_machine" "webserver1" {
-    name = "WebServer"
-    #computer_name = "devmachine"
+resource "azurerm_linux_virtual_machine" "webserver1" {
+    count = 2
+    name = "WebServer-${count.index}"
+    computer_name = "devmachine-${count.index}" #hostname
     resource_group_name = azurerm_resource_group.DemoforVM.name
     location = azurerm_resource_group.DemoforVM.location
-    vm_size = "Standard_DS1_v2"
-    #admin_username = "admin123"
-    network_interface_ids = [ azurerm_network_interface.myconn.id ]
+    size = "Standard_DS1_v2"
+    admin_username = "azureuser"
+    #network_interface_ids = [ azurerm_network_interface.myconn.id ]
+    network_interface_ids = [element(azurerm_network_interface.myconn[*].id, count.index)]
+    #delete_os_disk_on_termination = true
 
-  /*  admin_ssh_key {
+    admin_ssh_key {
       username = "azureuser"
-      public_key = file("${path.module}/sshkeys/tfpractise.pem.pub")
+      public_key = file("./sshkeys/tfpractise.pem.pub")
     }
-  */
+
+
+    os_disk {
+      name = "osdisk-${count.index}"
+      caching = "ReadWrite"
+      storage_account_type = "Standard_LRS"
+      
+    }
+  
+    source_image_reference {
+      publisher = "REDHAT"
+      offer  = "RHEL"
+      sku = "83-gen2"
+      version = "latest"
+
+    }
+
+    #custom_data = filebase64("./app-scripts/app1-cloud-init.txt")
+
+/*
     storage_image_reference {
       publisher = "Canonical"
       offer = "UbuntuServer"
@@ -39,9 +61,9 @@ resource "azurerm_virtual_machine" "webserver1" {
     os_profile_linux_config {
       disable_password_authentication = false
     }
-
+*/
     tags = {
-      environment = "DemoVM"
+      environment = "DemoVM-${count.index}"
     }
 
 }

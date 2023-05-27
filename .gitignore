@@ -1,0 +1,5 @@
+/ex_virtualmachine/terraform.state
+/ex_virtualmachine/terraform.tstate.backup
+/ex_virtualmachine/.terraform.lock.hcl
+/ex_virtualmachine/.terraform/
+/ex_virtualmachine/terraform*
